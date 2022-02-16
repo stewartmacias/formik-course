@@ -1,4 +1,4 @@
-import react from "react";  
+import React from "react";  
 import { Formik } from "formik";
 
 const SimpleForm = () => {
@@ -8,9 +8,17 @@ const SimpleForm = () => {
             onSubmit={ (values) => {
                 console.log("form values", values);
             }}
+            validate = {values => {
+                let errors = {}
+
+                if(!values.name) {
+                    errors.name = "Please enter a name";
+                }
+                return errors;
+            }}
         >
             {
-                ( {handleSubmit, handleChange, values} ) => (
+                ( {handleSubmit, handleChange, values, errors } ) => (
                     <form onSubmit={handleSubmit}>
                         <input 
                             onChange={handleChange} 
@@ -20,6 +28,14 @@ const SimpleForm = () => {
                             placeholder="Enter your name"
                         />
                         <button>Submit</button>
+
+                        {
+                            errors.name && (
+                                <div style={{color:'red'}}>
+                                    { errors.name }
+                                </div>
+                            )
+                        }
                     </form>
                 )
             }

@@ -1,45 +1,42 @@
-import React from "react";  
-import { Formik } from "formik";
+import React from 'react';  
+import { Formik, ErrorMessage } from 'formik';
 
 const SimpleForm = () => {
     return (
         <Formik
             initialValues={{name:''}}
-            onSubmit={ (values) => {
-                console.log("form values", values);
+            onSubmit={ (values, { setSubmitting }) => {
+                console.log('form values', values);
+                setTimeout(() => {
+                    console.log('🚀 ~ file: SimpleForm.js ~ line 12 ~ setTimeout ~ values', values)
+                    setSubmitting(false);
+                }, 5000)
             }}
             validate = {values => {
                 let errors = {}
 
                 if(!values.name) {
-                    errors.name = "Please enter a name";
+                    errors.name = 'Please enter a name';
                 }
                 return errors;
             }}
-        >
-            {
-                ( {handleSubmit, handleChange, values, errors } ) => (
-                    <form onSubmit={handleSubmit}>
+            render = {({handleSubmit, handleChange, values, errors, handleBlur, touched, isSubmitting }) => (
+                <form onSubmit={handleSubmit}>
                         <input 
                             onChange={handleChange} 
                             value={values.name}
-                            type="text" 
-                            name="name" 
-                            placeholder="Enter your name"
+                            type='text' 
+                            name='name' 
+                            placeholder='Enter your name'
+                            onBlur={handleBlur}
                         />
-                        <button>Submit</button>
+                        <button disabled={isSubmitting}>Submit</button>
 
-                        {
-                            errors.name && (
-                                <div style={{color:'red'}}>
-                                    { errors.name }
-                                </div>
-                            )
-                        }
+                        <ErrorMessage name='name'/>
                     </form>
-                )
-            }
-        </Formik>
+            )}
+            
+        />
     );
 }
 
